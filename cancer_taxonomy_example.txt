@@ -1,0 +1,46 @@
+dataset:
+attribute											value
+manually_curated__cases__demographic__year_of_birth	1944
+manually_curated__cases__disease_type				Breast Invasive Carcinoma
+biospecimen__admin__disease_code					BRCA
+manually_curated__cases__primary_site				Breast
+clinical__shared__gender							FEMALE
+clinical__clin_shared__vital_status					Dead
+biospecimen__bio__sample_type						Primary Tumor
+
+
+ontology:
+item			relation			item
+breast_cancer 		is_a 			thoracic_cancer
+thoracic_cancer 	is_a 			organ_system_cancer
+organ_system_cancer is_a 			cancer
+cancer 				is_a 			disease of cellular proliferation
+disease of cellular proliferation is_a disease
+
+
+select * from dataset where cancer = "thoracic_cancer"
+
+cerco 'cancer' tra  dataset:attribute 
+	se non lo trovo cerco 'cancer' in ontology:item
+		se lo trovo
+			lista_item_in_relazione_con_cancer = {disease_of_cellular_proliferation,organ_system_cancer}
+			lista_attribute_in_dataset = {year_of_birth,disease_type,primary_site,gender,vital_status,sample_type,disease_code}
+			controllo se lista_item_in_relazione_con_cancer e lista_attribute_in_dataset hanno un elemento in comune
+				elementi_disease = {disease_type,disease_code} 
+				funzione_similarità{'disease_of_cellular_proliferation',elementi_disease} //estrae un solo valore ad esempio
+				value = getValue("disease_type") //= "Breast Invasive Carcinoma"
+				procedo con ricerca del valore "thoracic_cancer" in ontology:item
+					if lo trovo
+						lista_item_in_relazione_con_thoracic_cancer = {breast_cancer,organ_system_cancer}
+						trova value in lista_item_in_relazione_con_thoracic_cancer
+						se lo trova
+							ritorna 
+							{
+								manually_curated__cases__demographic__year_of_birth	1944
+								manually_curated__cases__disease_type				Breast Invasive Carcinoma
+								manually_curated__cases__primary_site				Breast
+								clinical__shared__gender							FEMALE
+								clinical__clin_shared__vital_status					Dead
+								biospecimen__bio__sample_type						Primary Tumor
+							}
+
