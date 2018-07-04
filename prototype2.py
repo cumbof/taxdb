@@ -147,12 +147,100 @@ def load_meta_attributes_list(program, tumor, experiment_type):
                                     values.extend( meta_attributes[significant_meta_attribute] );
                                     values = list( set( values ) );
                                 meta_attributes[significant_meta_attribute] = values;
+                                # TO-DO restyle meta_attributes : split data by aliquot_uuid
     return list( set( meta_attributes ) );
 
 def main(argv):
     '''
     implementing use case
     select aliquot_uuid from metadata where cancer = "Thoracic Cancer"
+    '''
+    
+    '''
+    # (c1=3 and c2=r) or (c4=7 and c5=1 or c6=5) and (c7=9 or c8=w)
+    SEARCH_CONDITIONS = {
+        "group": {
+            "group": {
+                "group": {
+                    "entity": {
+                        "op": "c1=3",
+                        "hash": "eohr58"
+                    },
+                    "operator": {
+                        "op": "and",
+                        "el": "eohr58",
+                        "er": "h9f3g4",
+                        "hash": "ohf357"
+                    },
+                    "entity": {
+                        "op": "c2=r",
+                        "hash": "h9f3g4"
+                    },
+                    "hash": "bofw38"
+                },
+                "operator": {
+                    "op": "or",
+                    "el": "bofw38",
+                    "er": "ch9w34",
+                    "hash": "fh9b34"
+                },
+                "group": {
+                    "group": {
+                        "entity": {
+                            "op": "c4=7",
+                            "hash": "ifb7hf"
+                        },
+                        "operator": {
+                            "op": "and",
+                            "el": "ifb7hf",
+                            "er": "h93gf4",
+                            "hash": "vho3li"
+                        },
+                        "entity": {
+                            "op": "c5=1",
+                            "hash": "h93gf4"
+                        },
+                        "hash": "h9v35f"
+                    },
+                    "operator": {
+                        "op": "or",
+                        "el": "h9v35f",
+                        "er": "f92g34",
+                        "hash": "fhg924"
+                    },
+                    "entity": {
+                        "op": "c6=5",
+                        "hash": "f92g34"
+                    },
+                    "hash": "ch9w34"
+                },
+                "hash": "fh9344"
+            },
+            "operator": {
+                "op": "and",
+                "el": "fh9344",
+                "er": "olb9vf",
+                "hash": "ohf35f"
+            },
+            "group": {
+                "entity": {
+                    "op": "c7=9",
+                    "hash": "oqg309"
+                },
+                "operator": {
+                    "op": "or",
+                    "el": "oqg309",
+                    "er": "fwohr3",
+                    "hash": "hfg924"
+                },
+                "entity": {
+                    "op": "c8=w",
+                    "hash": "fwohr3"
+                },
+                "hash": "olb9vf"
+            }
+        }
+    }
     '''
 
     SELECT_CONDITIONS = [ "aliquot_uuid" ];
@@ -193,7 +281,6 @@ def main(argv):
             # stop at the first ontology that contains the WHERE unknown attribute
             # TO-DO: what if multiple ontologies contain the WHERE unknown attribute?
             candidate_ontology_id = "";
-
             for ontology_id in ONTOLOGIES_OBJS:
                 model = ONTOLOGIES_OBJS[ ontology_id ];
                 attribute_related_classes = model.getClass( unknown_where_attribute );
@@ -203,20 +290,22 @@ def main(argv):
                     central_attribute_class = attribute_related_classes[0];
                     in_ontology_related_attributes = central_attribute_class.parents();
                     in_ontology_related_attributes.extend( central_attribute_class.children() );
-                    best_related_attribute_in_dataset = extract_similar_attributes( in_ontology_related_attributes, list(metadata_attributes.keys()) );
-                    # search for WHERE value in the ontology
-                    unknown_where_value = SEARCH_CONDITIONS[ unknown_where_attribute ];
-                    value_related_classes = model.getClass( unknown_where_value );
-                    if len(value_related_classes) > 0:
-                        # consider the first class
-                        # TO-DO: what if the WHERE unknown value is related to multiple classes in the current ontology?
-                        central_value_class = attribute_related_classes[0];
-                        in_ontology_related_values = central_value_class.parents();
-                        in_ontology_related_values.extend( central_value_class.children() );
-                        if best_related_attribute_in_dataset in in_ontology_related_values:
-                            # extend dataset temporarily and use this temp version in the next iterations
-                            break;
-
+                    related_attributes_in_dataset = extract_similar_attributes( in_ontology_related_attributes, list(metadata_attributes.keys()) );
+                    for related_attribute_in_dataset in related_attributes_in_dataset:
+                        # search for WHERE value in the ontology
+                        unknown_where_value = SEARCH_CONDITIONS[ unknown_where_attribute ];
+                        value_related_classes = model.getClass( unknown_where_value );
+                        if len(value_related_classes) > 0:
+                            # consider the first class
+                            # TO-DO: what if the WHERE unknown value is related to multiple classes in the current ontology?
+                            central_value_class = attribute_related_classes[0];
+                            in_ontology_related_values = central_value_class.parents();
+                            in_ontology_related_values.extend( central_value_class.children() );
+                            if related_attribute_in_dataset in in_ontology_related_values:
+                                # extend dataset temporarily and use this temp version in the next iterations
+                                candidate_ontology_id = ontology_id;
+                                break;
+                    break;
 
 if __name__ == '__main__':
     main(sys.argv[1:])
