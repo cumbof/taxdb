@@ -1,5 +1,5 @@
 import os, json, gzip, cPickle
-import ontospy
+import pronto
 
 # set this parameter to False if the local repository
 # already contains the ontology serialized objects
@@ -97,7 +97,7 @@ def load_ontologies():
             print "> " + repo_json_filename + " contains " + str(len(ontologies_purls)) + " ontologies";
             for ontology_id in ontologies_purls:
                 print ">> " + ontologies_purls[ ontology_id ];
-                model = ontospy.Ontospy( ontologies_purls[ ontology_id ] );
+                model = pronto.Ontology( ontologies_purls[ ontology_id ] ); # use pronto package
                 obj_basepath = os.path.join( ONTOLOGIES_BASEPATH, ONTOLOGIES_REPOS[ repo ] );
                 obj_filepath = os.path.join( obj_basepath, ontology_id + "." + ONTOLOGY_OBJ_EXTENSION );
                 save_zipped_pack( model, obj_filepath );
@@ -119,6 +119,30 @@ def load_ontologies():
                             ONTOLOGIES_OBJS[ repo ][ obj_name ] = load_zipped_pack( obj_path );
                             ontologies_count += 1;
         print str(ontologies_count) + " ontologies loaded";
+
+'''
+search in ontology
+'''
+# model is a pronto obj
+def searchClasses(model, containsString):
+    hits = [ ];
+    for elem in model:
+        elem_name = (elem.name).strip().lower();
+        if containsString.strip().lower() in elem_name:
+            hits.append( elem.id );
+    return hits;
+
+def getRelatedClasses(model, classId):
+    related_classes = { };
+    parents = model[classId].rparents();
+    if len(parents) > 0:
+        for p in parents:
+            related_classes[p.id] = p.name;
+    children = model[classId].rchildren();
+    if len(children) > 0:
+        for c in children:
+            related_classes[c.id] = c.name;
+    return related_classes;
 
 '''
 local metadata and genomics utils
@@ -283,25 +307,23 @@ def main(argv):
             candidate_ontology_id = "";
             for ontology_id in ONTOLOGIES_OBJS:
                 model = ONTOLOGIES_OBJS[ ontology_id ];
-                attribute_related_classes = model.getClass( unknown_where_attribute );
+                attribute_related_classes = searchClasses( model, unknown_where_attribute );
                 if len(attribute_related_classes) > 0:
                     # consider the first class
                     # TO-DO: what if the WHERE unknown attribute is related to multiple classes in the current ontology?
                     central_attribute_class = attribute_related_classes[0];
-                    in_ontology_related_attributes = central_attribute_class.parents();
-                    in_ontology_related_attributes.extend( central_attribute_class.children() );
-                    related_attributes_in_dataset = extract_similar_attributes( in_ontology_related_attributes, list(metadata_attributes.keys()) );
+                    in_ontology_related_attributes = getRelatedClasses( model, central_attribute_class );
+                    related_attributes_in_dataset = extract_similar_attributes( list(in_ontology_related_attributes.values()), list(metadata_attributes.keys()) );
                     for related_attribute_in_dataset in related_attributes_in_dataset:
                         # search for WHERE value in the ontology
                         unknown_where_value = SEARCH_CONDITIONS[ unknown_where_attribute ];
-                        value_related_classes = model.getClass( unknown_where_value );
+                        value_related_classes = searchClasses( model, unknown_where_value );
                         if len(value_related_classes) > 0:
                             # consider the first class
                             # TO-DO: what if the WHERE unknown value is related to multiple classes in the current ontology?
                             central_value_class = attribute_related_classes[0];
-                            in_ontology_related_values = central_value_class.parents();
-                            in_ontology_related_values.extend( central_value_class.children() );
-                            if related_attribute_in_dataset in in_ontology_related_values:
+                            in_ontology_related_values = getRelatedClasses( model, central_value_class );
+                            if related_attribute_in_dataset in list(in_ontology_related_values.values()):
                                 # extend dataset temporarily and use this temp version in the next iterations
                                 candidate_ontology_id = ontology_id;
                                 break;
