@@ -1,0 +1,128 @@
+biospecimen__admin__bcr
+Nationwide Children's Hospital
+
+clinical__acc_shared__distant_metastasis_anatomic_site
+Lymph nodes
+Retroperitoneum
+Vena cava and left atrium of the heart
+brain
+left cervical lymph node
+
+clinical__acc_shared__excess_adrenal_hormone_history_type
+Androgen
+Cortisol
+Estrogen
+Mineralocorticoids
+None
+
+clinical__acc_shared__metastatic_neoplasm_initial_diagnosis_anatomic_site
+Bone
+Liver
+Lung
+Other, specify
+
+clinical__clin_shared__ct_scan_findings
+Liver Involvement
+Lung Involvement
+Normal
+Retroperitoneal Lymph Node Involvement
+Vena Cava Involvement/thrombus
+
+clinical__clin_shared__tumor_tissue_site
+Adrenal
+
+clinical__nte__new_neoplasm_event_occurrence_anatomic_site
+Bone
+Liver
+Lung
+Lymph Node(s)
+Other, specify
+Peritoneal Surfaces
+Soft Tissue
+
+clinical__nte__new_neoplasm_occurrence_anatomic_site_text
+Brain
+Ovarian
+pancreas
+vena cava thrombus
+
+clinical__rx__drug_name
+Adriamycin
+Sorafenib
+carboplatin
+sunitinib
+xeloda
+
+clinical__rx__therapy_type
+Chemotherapy
+Targeted Molecular therapy
+
+gdc__center__name
+Baylor College of Medicine
+Broad Institute of MIT and Harvard
+Canada's Michael Smith Genome Sciences Centre
+Johns Hopkins / University of Southern California
+University of North Carolina
+
+gdc__center__namespace
+bcgsc.ca
+broad.mit.edu
+hgsc.bcm.edu
+jhu-usc.edu
+unc.edu
+
+gdc__center__short_name
+BCGSC
+BCM
+BI
+JHU_USC
+UNC
+
+gdc__demographic__ethnicity
+hispanic or latino
+not hispanic or latino
+not reported
+
+gdc__demographic__race
+asian
+black or african american
+not reported
+white
+
+gdc__diagnoses__primary_diagnosis
+Adrenal cortical carcinoma
+
+gdc__diagnoses__site_of_resection_or_biopsy
+Cortex of adrenal gland
+
+gdc__diagnoses__tissue_or_organ_of_origin
+Cortex of adrenal gland
+
+gdc__disease_type
+Adenomas and Adenocarcinomas
+
+gdc__primary_site
+Adrenal gland
+
+gdc__project__disease_type
+Adrenocortical Carcinoma
+
+gdc__samples__sample_type
+Blood Derived Normal
+Primary Tumor
+Solid Tissue Normal
+
+gdc__tissue_source_site__name
+Roswell Park
+Translational Genomics Research Institute
+University Health Network
+University of Michigan
+University of Minnesota
+
+_______________________________________________
+
+Domini Ontologici:
+1. geografico (http://obofoundry.org/ontology/geo.html NO OBO)
+2. anatomico (https://github.com/obophenotype/human-developmental-anatomy-ontology/tree/master/src/ontology [ehdaa2.owl])
+3. farmacologico (http://obofoundry.org/ontology/dron.html NO OBO)
+4. malattie (http://obofoundry.org/ontology/doid.html)
