@@ -121,8 +121,8 @@ University of Minnesota
 
 _______________________________________________
 
-Domini Ontologici:
-1. geografico (http://obofoundry.org/ontology/geo.html NO OBO)
-2. anatomico (https://github.com/obophenotype/human-developmental-anatomy-ontology/tree/master/src/ontology [ehdaa2.owl])
-3. farmacologico (http://obofoundry.org/ontology/dron.html NO OBO)
-4. malattie (http://obofoundry.org/ontology/doid.html)
+Ontological domains:
+1. http://obofoundry.org/ontology/geo.html
+2. https://github.com/obophenotype/human-developmental-anatomy-ontology/tree/master/src/ontology
+3. http://obofoundry.org/ontology/dron.html
+4. http://obofoundry.org/ontology/doid.html
