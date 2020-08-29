@@ -38,7 +38,7 @@ SEARCH_FOR_ROOT = "ontologies";
 SEARCH_FOR_ID = "id";
 SEARCH_FOR_ARRAY = "products";
 SEARCH_FOR_TARGET = "ontology_purl";
-SEARCH_FOR_EXTENSION = "owl";
+SEARCH_FOR_EXTENSION = "obo";
 
 # extension for the ontology serialized objects
 ONTOLOGY_OBJ_EXTENSION = "zpkl";
@@ -150,7 +150,7 @@ local metadata and genomics utils
 
 def load_meta_attributes_list(program, tumor, experiment_type):
     # build target metadata directory
-    meta_dir = os.path.join( os.path.join( os.path.join( METADATA_BASEPATH, program ), tumor ), experiment_type);
+    meta_dir = os.path.join( METADATA_BASEPATH, program, tumor, experiment_type );
     meta_attributes = { };
     if os.path.exists( meta_dir ):
         for subdir, dirs, files in os.walk( meta_dir ):
