@@ -1,5 +1,5 @@
 # TaxDB
-Relaxing DB queries through domain taxonomies
+Taxonomy-based relaxed queries on domain-specific ontologies: upward and downward extension
 
 ### Taxonomy Data Source
 1. [http://www.obofoundry.org/](http://www.obofoundry.org/)
